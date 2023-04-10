@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Ask the user how many WLAN interfaces they want to randomize
+read -p "How many WLAN interfaces do you want to randomize MAC addresses for? " num_interfaces
+
+# Loop through the number of interfaces specified by the user
+for (( i=0; i<$num_interfaces; i++ ))
+do
+    # Set the interface name based on the loop index
+    interface="wlan$i"
+
+    # Bring the interface down
+    sudo ip link set $interface down
+   
+    # Randomize the MAC address using macchanger
+    sudo macchanger -r $interface
+   
+    # Bring the interface back up
+    sudo ip link set $interface up
+   
+    # Confirm the randomized MAC address using macchanger
+    sudo macchanger -s $interface
+done
